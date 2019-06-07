@@ -1,0 +1,31 @@
+function MorningCall() {
+  DeleteTrigger();
+  const url = 'https://maker.ifttt.com/trigger/<設定したWebhookのイベント名>/with/key/<確認したWebhookのkey>';
+  var value1 = IsHoliday() ? '休日'　: '平日';
+  var value2 = IsHoliday() ? '散歩'　: 'プログラムの実績作り';
+  var data = {
+    'value1':value1,
+    'value2':value2
+  };
+  var options = {
+    'method':'post',
+    'contentType':'application/json',
+    'payload':JSON.stringify(data)
+  };
+  UrlFetchApp.fetch(url, options);
+}
+
+function SetTrigger() {
+  var today = new Date();
+  today.setHours(6);
+  today.setMinutes(0);
+  ScriptApp.newTrigger("MorningCall").timeBased().at(today).create();
+}
+
+function DeleteTrigger() {
+  var triggers = ScriptApp.getProjectTriggers();
+  for(var i = 0; i < triggers.length; i++) {
+    if(triggers[i].getHandlerFunction() == "MorningCall")
+      ScriptApp.deleteTrigger(triggers[i]);
+  }
+}

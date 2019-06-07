@@ -1,0 +1,16 @@
+function IsHoliday() {
+  var today = new Date();
+  // 土日判定
+  var weekInt = today.getDay();
+  if(weekInt <= 0 || 6 <= weekInt)
+    return true;
+
+  //祝日判定
+  var calendarId = "ja.japanese#holiday@group.v.calendar.google.com";
+  var calendar = CalendarApp.getCalendarById(calendarId);
+  var todayEvents = calendar.getEventsForDay(today);
+  if(todayEvents.length > 0)
+    return true;
+
+  return false;
+}
